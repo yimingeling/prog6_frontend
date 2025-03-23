@@ -7,10 +7,10 @@ import Home from './pages/Home.jsx'
 import Layout from './components/Layout.jsx';
 import SetupsList from "./pages/SetupsList.jsx";
 import SetupsDetails from "./pages/setupsDetails.jsx";
-import List from "./pages/People.jsx";
 import React from "react";
 import SetupsEdit from "./pages/setupsEdit.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
+import Success from "./pages/Success.jsx";
 
 
 const router = createBrowserRouter([
@@ -38,9 +38,10 @@ const router = createBrowserRouter([
                 path: '/setups/:id',
                 element: <SetupsDetails/>,
             },
+
             {
-                path: '/people',
-                element: <List/>,
+                path: '/success',
+                element: <Success/>,
             },
             {
                 path: '*',

@@ -2,15 +2,17 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useState, useEffect } from "react";
 
 function SetupsEdit() {
-    const navigate = useNavigate(); // Hook for redirection
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const [errors, setErrors] = useState({});
 
-    const params = useParams();
-    const id = params.id;
+
     const [formData, setFormData] = useState({
         title: '',
         body: '',
         author: '',
     });
+
     const [successMessage, setSuccessMessage] = useState(null);
 
     useEffect(() => {
@@ -23,6 +25,7 @@ function SetupsEdit() {
 
                 if (!response.ok) {
                     navigate('/404');
+                    return;
                 }
 
                 const data = await response.json();
@@ -35,13 +38,31 @@ function SetupsEdit() {
         fetchDetails();
     }, [id]);
 
+
+    const validateForm = () => {
+        let validationErrors = {};
+        if (!formData.title.trim()) validationErrors.title = "Title is required.";
+        if (!formData.body.trim()) validationErrors.body = "Body is required.";
+        if (!formData.author.trim()) validationErrors.author = "Author is required.";
+
+        setErrors(validationErrors);
+        return Object.keys(validationErrors).length === 0;
+    };
+
+
     function handleInputChange(event) {
         const { name, value } = event.target;
         setFormData(prevState => ({ ...prevState, [name]: value }));
     }
+
+
+
     async function handleSubmit(event) {
         event.preventDefault();
         setSuccessMessage(null);
+
+        if (!validateForm()) return;
+
 
         try {
             const response = await fetch(`http://145.24.223.232:8000/setups/${id}`, {
@@ -68,72 +89,85 @@ function SetupsEdit() {
             }
 
             setSuccessMessage("Setup successfully updated! 🎉");
-
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
     return (
-        <>
-            <h1 className="text-2xl font-bold text-center m-3">Edit Setup</h1>
+        <div className="min-h-screen flex items-center justify-center p-6">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 max-w-lg w-full">
+                <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Edit Setup</h1>
 
-            {successMessage && (
-                <div className="max-w-md mx-auto p-4 mb-4 bg-green-100 text-green-700 border border-green-400 rounded">
-                    {successMessage}
-                </div>
-            )}
+                {successMessage && (
+                    <div className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 p-3 rounded-md mb-4">
+                        {successMessage}
+                    </div>
+                )}
 
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-gray-100 rounded shadow-md mt-10 space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label htmlFor="title" className="block text-gray-700 dark:text-gray-300 font-medium">Title:</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleInputChange}
+                            className="w-full mt-1 p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500"
+                        />
+                        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
 
-                <div>
-                    <label htmlFor="title" className="block text-gray-700 font-medium mb-2">Titel:</label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
+                    </div>
 
-                <div>
-                    <label htmlFor="body" className="block text-gray-700 font-medium mb-2">Beschrijving:</label>
-                    <textarea
-                        id="body"
-                        name="body"
-                        value={formData.body}
-                        onChange={handleInputChange}
-                        rows="4"
-                        className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
-                    ></textarea>
-                </div>
+                    <div>
+                        <label htmlFor="body" className="block text-gray-700 dark:text-gray-300 font-medium">Body:</label>
+                        <textarea
+                            id="body"
+                            name="body"
+                            value={formData.body}
+                            onChange={handleInputChange}
+                            rows="4"
+                            className="w-full mt-1 p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500"
+                        ></textarea>
+                        {errors.body && <p className="text-red-500 text-sm mt-1">{errors.body}</p>}
 
-                <div>
-                    <label htmlFor="author" className="block text-gray-700 font-medium mb-2">Author:</label>
-                    <textarea
-                        id="author"
-                        name="author"
-                        value={formData.author}
-                        onChange={handleInputChange}
-                        rows="4"
-                        className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
-                    ></textarea>
-                </div>
+                    </div>
 
-                <button type="submit" className="w-full bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition">
-                    Save Changes
-                </button>
+                    <div>
+                        <label htmlFor="author" className="block text-gray-700 dark:text-gray-300 font-medium">Author:</label>
+                        <input
+                            type="text"
+                            id="author"
+                            name="author"
+                            value={formData.author}
+                            onChange={handleInputChange}
+                            className="w-full mt-1 p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500"
+                        />
+                        {errors.author && <p className="text-red-500 text-sm mt-1">{errors.author}</p>}
 
-                <Link
-                    to={`/setups/`}
-                    className="inline-block text-center w-full px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition mt-2"
-                >
-                    Go Back
-                </Link>
-            </form>
-        </>
+                    </div>
+
+
+
+                    <div className="flex justify-between">
+                        <button
+                            type="submit"
+                            className="bg-blue-500 dark:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition"
+                        >
+                            Save Changes
+                        </button>
+
+                        <Link
+                            to={`/setups/`}
+                            className="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition"
+                        >
+                            Go Back
+                        </Link>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }
 

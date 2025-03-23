@@ -34,6 +34,8 @@ function SetupsList() {
             } else {
                 console.error("Failed to delete the setup.");
             }
+            alert('deleting setup')
+
         } catch (error) {
             console.error("Error deleting setup:", error);
         }

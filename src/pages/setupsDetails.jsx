@@ -18,7 +18,7 @@ function SetupsDetails() {
                 });
 
                 if (!response.ok) {
-                    navigate('/404'); // Redirect to 404 if the setup is not found
+                    navigate('/404'); // Redirect 404
                     return;
                 }
 
@@ -44,8 +44,9 @@ function SetupsDetails() {
             if (!response.ok) {
                 throw new Error("Failed to delete the Setup.");
             }
+            alert('deleting setup')
 
-            navigate("/setups"); // Redirect to setups list after deletion
+            navigate("/setups");
         } catch (error) {
             setDeleteError(error.message);
         }
@@ -70,11 +71,11 @@ function SetupsDetails() {
     return (
         <div className="min-h-screen flex items-center justify-center p-6">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden max-w-xl w-full">
-                <img
-                    src="https://plein8.com/wp-content/uploads/2024/09/placeholder-2-1.png"
-                    alt={details.title}
-                    className="w-full h-64 object-cover"
-                />
+                {/*<img*/}
+                {/*    src="https://plein8.com/wp-content/uploads/2024/09/placeholder-2-1.png"*/}
+                {/*    alt={details.title}*/}
+                {/*    className="w-full h-64 object-cover"*/}
+                {/*/>*/}
                 <div className="p-6">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{details.title}</h1>
                     <p className="text-gray-700 dark:text-gray-300 mt-2">{details.body}</p>
