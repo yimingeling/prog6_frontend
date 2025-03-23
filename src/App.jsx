@@ -1,12 +1,16 @@
 import {createBrowserRouter, RouterProvider} from 'react-router';
 // import je components
 import './App.css'
-import NotesCreate from "./pages/NotesCreate.jsx";
+import SetupsCreate from "./pages/setupsCreate.jsx";
 import Home from './pages/Home.jsx'
 
 import Layout from './components/Layout.jsx';
-import NotesList from "./pages/NotesList.jsx";
+import SetupsList from "./pages/SetupsList.jsx";
+import SetupsDetails from "./pages/setupsDetails.jsx";
 import List from "./pages/People.jsx";
+import React from "react";
+import SetupsEdit from "./pages/setupsEdit.jsx";
+import PageNotFound from "./pages/PageNotFound.jsx";
 
 
 const router = createBrowserRouter([
@@ -19,16 +23,28 @@ const router = createBrowserRouter([
             },
             {
                 path: '/create',
-                element: <NotesCreate/>,
+                element: <SetupsCreate/>,
             },
 
             {
-                path: '/notes',
-                element: <NotesList/>,
+                path: '/setups',
+                element: <SetupsList/>,
+            },
+            {
+                path: '/setups/:id/edit',
+                element: <SetupsEdit/>,
+            },
+            {
+                path: '/setups/:id',
+                element: <SetupsDetails/>,
             },
             {
                 path: '/people',
                 element: <List/>,
+            },
+            {
+                path: '*',
+                element: <PageNotFound/>,
             },
         ]
     }
